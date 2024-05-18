@@ -1,5 +1,10 @@
 #include "ScalarConverter.hpp"
 
+char ScalarConverter::_char = 0;
+int ScalarConverter::_int = 0;
+float ScalarConverter::_float = 0.0f;
+double ScalarConverter::_double = 0.0;
+
 ScalarConverter::ScalarConverter()
 {
     std::cout << "Default contstructor initiated!" << std::endl;
@@ -8,13 +13,13 @@ ScalarConverter::ScalarConverter()
 ScalarConverter::ScalarConverter(const std::string &arg) : _arg(arg)
 {
     std::cout << "Constructor for argument has been initiated!" << std::endl;
-    this->checker();
+    this->convert(arg);
 }
 
 ScalarConverter::ScalarConverter(const ScalarConverter &copy) : _arg(copy._arg)
 {
     std::cout << "Copy constructor initiated!" << std::endl;
-    *this = copy;
+    (void)copy;
 }
 
 ScalarConverter &ScalarConverter::operator=(const ScalarConverter &src)
@@ -60,49 +65,44 @@ double ScalarConverter::getDouble() const
     return (this->_double);
 }
 
-int ScalarConverter::checker()
+void ScalarConverter::convert(const std::string &arg)
 {
-    if (!(!isdigit(_arg[0]) && _arg.length() == true))
-    {
-        this->_int = this-> _double > 0 ? static_cast<int>(this->_double + 0.5) : static_cast<int>(this->_double - 0.5);
-        this->_float = std::stof(_arg);
-        this->_double = std::stod(_arg);
-        this->_char = static_cast<char>(_arg[0]);
+    if (arg.empty() || (arg.length() == 1 && !isprint(arg[0]))) {
+        throw IncorrectScalarException();
     }
-    else
-    {
-        this->_int = static_cast<int>(_arg[0]);
-        this->_float = static_cast<float>(_arg[0]);
-        this->_double = static_cast<double>(_arg[0]);
-        this->_char = _arg[0];
+
+    try {
+        if (arg.length() == 1 && !isdigit(arg[0])) {
+            _char = static_cast<char>(arg[0]);
+            _int = static_cast<int>(_char);
+            _float = static_cast<float>(_char);
+            _double = static_cast<double>(_char);
+        } else {
+            _int = std::stoi(arg);
+            _float = std::stof(arg);
+            _double = std::stod(arg);
+            _char = (isprint(_int) && _int >= 0 && _int <= 127) ? static_cast<char>(_int) : 0;
+        }
+
+        if (isprint(_char) && _char != 0)
+            std::cout << "char: '" << bold << _char << reset << "'" << std::endl;
+        else
+            std::cout << "char: " << red << italics << "Non displayable" << reset << std::endl;
+
+        std::cout << "int: " << bold << _int << reset << std::endl;
+
+        std::cout << std::fixed << std::setprecision(1);
+        std::cout << "float: " << bold << _float << reset << "f" << std::endl;
+        std::cout << "double: " << bold << _double  << reset<< std::endl;
+    } catch (const std::exception &e) {
+        std::cout << "char: " << red << italics << "invalid!" << reset << std::endl;
+        std::cout << "int: " << red << italics << "invalid!" << reset << std::endl;
+        std::cout << "float: " << red << italics << "invalid!" << reset << std::endl;
+        std::cout << "double: " << red << italics << "invalid!" << reset << std::endl;
     }
-    return (0);
 }
 
 const char *ScalarConverter::IncorrectScalarException::what() const throw()
 {
     return ("Error: Incorrect scalar value!");
-}
-
-std::ostream &operator<<(std::ostream &os, const ScalarConverter &scalar)
-{
-    if (scalar.getInt() >= 'A' && scalar.getInt() <= 'Z')
-        os << "char: " << scalar.getChar() << std::endl;
-    else if (isnan(scalar.getFloat()) || isinf(scalar.getFloat()))
-        os << "char: impossible" << std::endl;
-    else
-        os << "char: " << scalar.getFloat() << ".0f" << std::endl;
-
-    if (isnan(scalar.getFloat()) || isinf(scalar.getFloat()))
-        os << "float: impossible" << std::endl;
-    else
-        os << "float: " << scalar.getFloat() << "f" << std::endl;
-
-    if (isnan(scalar.getDouble()) || isinf(scalar.getDouble()))
-        os << "double: impossible" << std::endl;
-    else
-        os << "double: " << scalar.getDouble() << ".0" << std::endl;
-    
-    os << "int: " << scalar.getInt() << std::endl;
-    return (os);
 }

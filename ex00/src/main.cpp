@@ -8,6 +8,5 @@ int main (int argc, char **argv)
         return (1);
     }
     ScalarConverter scalar(argv[1]);
-    std::cout << scalar << std::endl;
     return (0);
 }

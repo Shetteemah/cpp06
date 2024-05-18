@@ -1,24 +1,34 @@
 #ifndef SCALARCONVERTER_HPP
 #define SCALARCONVERTER_HPP
 
-#include <iostream>
 #include <string>
+#include <iostream>
+#include <limits>
+#include <climits>
+#include <iomanip>
 #include <exception>
+
+const std::string bold = "\033[1m";
+const std::string italics = "\033[3m";
+const std::string underline = "\033[4m";
+const std::string box = "\033[51m";
+const std::string red = "\033[31m";
+const std::string reset = "\033[0m";
 
 class ScalarConverter
 {
     private:
         const std::string _arg;
-        char _char;
-        int _int;
-        float _float;
-        double _double;
+        static char _char;
+        static int _int;
+        static float _float;
+        static double _double;
         ScalarConverter();
+        ScalarConverter(const ScalarConverter &copy);
+        ScalarConverter &operator=(const ScalarConverter &src);
 
     public:
         ScalarConverter(const std::string &arg);
-        ScalarConverter(const ScalarConverter &copy);
-        ScalarConverter &operator=(const ScalarConverter &src);
         ~ScalarConverter();
 
         const std::string getArgument();
@@ -26,7 +36,7 @@ class ScalarConverter
         int getInt() const;
         float getFloat() const;
         double getDouble() const;
-        int checker();
+        static void convert(const std::string &arg);
 
     class IncorrectScalarException : virtual public std::exception
     {
@@ -36,5 +46,4 @@ class ScalarConverter
 
 
 };
-std::ostream &operator<<(std::ostream &os, const ScalarConverter &scalar);
 #endif
