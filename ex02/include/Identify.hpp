@@ -21,4 +21,8 @@ class B : public Base
 class C : public Base
 {};
 
+Base *create();
+void identifyPointer(const Base *ptr);
+void identifyReference(const Base &ref);
+
 #endif
