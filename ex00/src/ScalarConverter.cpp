@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ScalarConverter.cpp                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sheali <sheali@student.42.fr>              +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/05/21 02:57:06 by sheali            #+#    #+#             */
+/*   Updated: 2024/05/21 03:06:23 by sheali           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ScalarConverter.hpp"
 
 char ScalarConverter::_char = 0;
@@ -95,10 +107,10 @@ void ScalarConverter::convert(const std::string &arg)
         std::cout << "float: " << bold << _float << reset << "f" << std::endl;
         std::cout << "double: " << bold << _double  << reset<< std::endl;
     } catch (const std::exception &e) {
-        std::cout << "char: " << red << italics << "invalid!" << reset << std::endl;
-        std::cout << "int: " << red << italics << "invalid!" << reset << std::endl;
-        std::cout << "float: " << red << italics << "invalid!" << reset << std::endl;
-        std::cout << "double: " << red << italics << "invalid!" << reset << std::endl;
+        std::cout << "char: " << red << italics << "impossible" << reset << std::endl;
+        std::cout << "int: " << red << italics << "impossible" << reset << std::endl;
+        std::cout << "float: " << red << italics << arg << "f" <<reset << std::endl;
+        std::cout << "double: " << red << italics <<  arg << reset << std::endl;
     }
 }
 
